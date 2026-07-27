@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Fontanería</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- ============================================ -->
+    <!-- HEADER / NAVEGACIÓN                         -->
+    <!-- ============================================ -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <i class="fas fa-wrench logo"></i>
+                <h1 class="logo-text">Gestión <span>de Inventario</span></h1>
+            </div>
+            <div class="header-actions">
+                <span class="user-info" id="userInfo">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Empleada(o)</span>
+                </span>
+                <button class="btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================ -->
+    <!-- CONTENIDO PRINCIPAL                         -->
+    <!-- ============================================ -->
+    <main class="main-content">
+
+        <!-- ===== PANEL DE ESTADÍSTICAS ===== -->
+        <section class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #3b82f6;">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalProductos">0</span>
+                    <span class="stat-label">Total Productos</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #10b981;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="productosStock">0</span>
+                    <span class="stat-label">En Stock</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #f59e0b;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="bajoStock">0</span>
+                    <span class="stat-label">Stock Bajo (&lt; 10)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #ef4444;">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="sinStock">0</span>
+                    <span class="stat-label">Sin Stock</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FORMULARIO DE PRODUCTO ===== -->
+        <section class="form-section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-plus-circle"></i>
+                    <span id="formTitle">Agregar Nuevo Producto</span>
+                </h2>
+                <button class="btn-cancelar" id="btnCancelarEdit" style="display: none;">
+                    <i class="fas fa-times"></i>
+                    Cancelar Edición
+                </button>
+            </div>
+
+            <form id="productForm" class="product-form" autocomplete="off">
+                <!-- Fila 1: Nombre y Código -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">
+                            <i class="fas fa-tag"></i>
+                            Nombre del Producto <span class="required">*</span>
+                        </label>
+                        <input type="text" id="productName" placeholder="Ej: Grifo monomando lavaplatos" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCode">
+                            <i class="fas fa-barcode"></i>
+                            Código del Producto <span class="required">*</span>
+                        </label>
+                        <input type="text" id="productCode" placeholder="Ej: GR-001-2024" required>
+                        <small class="helper-text">Código único para identificación</small>
+                    </div>
+                </div>
+
+                <!-- Fila 2: Precio y Stock -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">
+                            <i class="fas fa-dollar-sign"></i>
+                            Precio (USD) <span class="required">*</span>
+                        </label>
+                        <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">
+                            <i class="fas fa-cubes"></i>
+                            Stock <span class="required">*</span>
+                        </label>
+                        <input type="number" id="productStock" placeholder="0" min="0" required>
+                    </div>
+                </div>
+
+                <!-- Fila 3: Imagen y Categoría -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productImage">
+                            <i class="fas fa-image"></i>
+                            URL de la Imagen
+                        </label>
+                        <input type="url" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
+                        <small class="helper-text">Pega la URL de la imagen del producto</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">
+                            <i class="fas fa-folder"></i>
+                            Categoría
+                        </label>
+                        <select id="productCategory">
+                            <option value="">Seleccionar categoría...</option>
+                            <option value="baño">Baño</option>
+                            <option value="cocina">Cocina</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Fila 4: Descripción -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="productDescription">
+                            <i class="fas fa-align-left"></i>
+                            Descripción del Producto
+                        </label>
+                        <textarea id="productDescription" rows="3" placeholder="Describe las características del producto..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Vista previa de la imagen -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <div id="imagePreviewContainer" style="display: none;">
+                            <label>Vista previa de la imagen</label>
+                            <div class="image-preview">
+                                <img id="imagePreview" src="#" alt="Vista previa del producto">
+                                <button type="button" class="btn-remove-image" id="btnRemoveImage">
+                                    <i class="fas fa-times-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones del formulario -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="btnSubmit">
+                        <i class="fas fa-save"></i>
+                        <span id="btnText">Guardar Producto</span>
+                    </button>
+                    <button type="reset" class="btn-reset">
+                        <i class="fas fa-undo"></i>
+                        Limpiar Campos
+                    </button>
+                </div>
+            </form>
+        </section>
+
+<!-- ===== LISTA DE PRODUCTOS ===== -->
+<section class="products-section">
+    <div class="section-header">
+        <h2>
+            <i class="fas fa-list"></i>
+            Inventario de Productos
+        </h2>
+        <div class="section-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchProduct" placeholder="Buscar por nombre o código...">
+            </div>
+            <span class="products-count" id="productsCount">0 productos</span>
+        </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+    </div>
+
+    <div class="empty-state" id="emptyState">
+        <i class="fas fa-box-open"></i>
+        <h3>No hay productos en el inventario</h3>
+        <p>Comienza agregando tu primer producto usando el formulario.</p>
+    </div>
+</section>
+
+<!-- ===== SECCIÓN DE PEDIDOS ===== -->
+<section class="orders-section">
+    <div class="section-header">
+        <h2>
+            <i class="fas fa-shopping-cart"></i>
+            Gestión de Pedidos
+        </h2>
+        <button class="btn-toggle-orders" id="btnToggleOrders">
+            <i class="fas fa-plus"></i>
+            Nuevo Pedido
+        </button>
+    </div>
+
+    <!-- ===== FORMULARIO DE PEDIDO ===== -->
+    <div class="order-form-container" id="orderFormContainer" style="display: none;">
+        <form id="orderForm" class="order-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="orderClient">
+                        <i class="fas fa-user"></i>
+                        Nombre del Cliente <span class="required">*</span>
+                    </label>
+                    <input type="text" id="orderClient" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label for="orderPhone">
+                        <i class="fas fa-phone"></i>
+                        Teléfono <span class="required">*</span>
+                    </label>
+                    <input type="tel" id="orderPhone" placeholder="Ej: 0412-1234567" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="orderProductSelect">
+                        <i class="fas fa-box"></i>
+                        Seleccionar Producto
+                    </label>
+                    <div class="order-product-selector">
+                        <select id="orderProductSelect">
+                            <option value="">Seleccionar producto...</option>
+                        </select>
+                        <input type="number" id="orderQuantity" placeholder="Cantidad" min="1" value="1" style="width:100px;">
+                        <button type="button" class="btn-add-product-order" id="btnAddProductOrder">
+                            <i class="fas fa-plus"></i>
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de productos del pedido -->
+            <div class="order-products-list" id="orderProductsList">
+                <h4>Productos del Pedido</h4>
+                <div id="orderProductsContainer">
+                    <p class="empty-products-msg">No hay productos agregados</p>
+                </div>
+                <div class="order-total">
+                    <span>Total del Pedido:</span>
+                    <span class="order-total-amount" id="orderTotalAmount">$0.00</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" id="btnSaveOrder">
+                    <i class="fas fa-save"></i>
+                    Guardar Pedido
+                </button>
+                <button type="button" class="btn-reset" id="btnCancelOrder">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ===== LISTA DE PEDIDOS ===== -->
+    <div class="orders-list-container">
+        <div class="orders-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchOrder" placeholder="Buscar pedido por cliente...">
+            </div>
+            <span class="orders-count" id="ordersCount">0 pedidos</span>
+        </div>
+        <div class="orders-grid" id="ordersGrid">
+            <!-- Los pedidos se cargarán aquí -->
+        </div>
+        <div class="empty-state" id="emptyOrdersState">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>No hay pedidos registrados</h3>
+            <p> || Crea tu primer pedido haciendo clic en "Nuevo Pedido".||</p>
+        </div>
+    </div>
+</section>
+
+    </main>
+    <!-- ============================================ -->
+    <!-- SCRIPTS                                     -->
+    <!-- ============================================ -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="orders.js"></script>
+</body>
+</html>
