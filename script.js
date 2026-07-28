@@ -29,10 +29,11 @@ import { initOrders } from './orders.js';
 const productosRef = collection(db, "productos");
 
 // ============================================
-// VARIABLES GLOBALES
+// VARIABLES GLOBALES (SOLO UNA VEZ)
 // ============================================
 
 let productosGlobal = [];
+window.productosGlobal = productosGlobal; // Para exportar al scope global
 let productoEnEdicion = null;
 
 // ============================================
@@ -84,6 +85,9 @@ async function cargarProductos() {
             });
         });
 
+        // ✅ Actualizar window.productosGlobal
+        window.productosGlobal = productosGlobal;
+
         renderizarProductos(productosGlobal);
         actualizarEstadisticas(productosGlobal);
     } catch (error) {
@@ -96,7 +100,7 @@ async function cargarProductos() {
 // FUNCIÓN: RECARGAR PRODUCTOS GLOBALES
 // ============================================
 
-async function cargarProductosGlobal() {
+async function recargarProductosGlobal() {
     try {
         const snapshot = await getDocs(productosRef);
         productosGlobal = [];
@@ -106,12 +110,14 @@ async function cargarProductosGlobal() {
                 ...doc.data()
             });
         });
-        // Actualizar el select
-        await cargarProductosSelect();
+        window.productosGlobal = productosGlobal;
+        return productosGlobal;
     } catch (error) {
         console.error("Error al recargar productos:", error);
+        return [];
     }
 }
+
 // ============================================
 // FUNCIÓN: RENDERIZAR PRODUCTOS EN TARJETAS
 // ============================================
@@ -481,16 +487,21 @@ onAuthStateChanged(auth, (user) => {
         userName.textContent = user.displayName || user.email?.split('@')[0] || 'Empleado';
         console.log("👤 Usuario autenticado:", user.email);
         cargarProductos();
+        initOrders(); // ✅ Inicializar pedidos
     } else {
         console.log("⚠️ Usuario no autenticado");
         window.location.href = 'login.html';
     }
 });
 
+// ============================================
+// ESCUCHAR ACTUALIZACIONES DE PRODUCTOS
+// ============================================
+
 document.addEventListener('productosActualizados', (event) => {
     const { productos } = event.detail;
 
-    console.log("🔄 Evento recibido - Actualizando productos en vista")
+    console.log("🔄 Evento recibido - Actualizando productos en vista");
 
     productosGlobal = productos;
     window.productosGlobal = productos;
@@ -498,8 +509,8 @@ document.addEventListener('productosActualizados', (event) => {
     renderizarProductos(productos);
     actualizarEstadisticas(productos);
 
-    console.log("Productos Actualizados en la Interfaz")
-})
+    console.log("✅ Productos actualizados en la interfaz");
+});
 
 // ============================================
 // INICIALIZACIÓN
