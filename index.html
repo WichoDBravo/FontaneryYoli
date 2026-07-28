@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     
@@ -205,6 +207,10 @@
             Inventario de Productos
         </h2>
         <div class="section-controls">
+            <button class="btn-export-pdf" id="btnExportPDF" onclick="exportarProductosPDF()">
+                <i class="fas fa-file-pdf"></i>
+                Exportar PDF
+            </button>
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchProduct" placeholder="Buscar por nombre o código...">
@@ -327,5 +333,6 @@
     <script type="module" src="firebase-config.js"></script>
     <script type="module" src="script.js"></script>
     <script type="module" src="orders.js"></script>
+    <script src="export-pdf.js"></script>
 </body>
 </html>
