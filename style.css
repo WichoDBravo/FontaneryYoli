@@ -429,7 +429,7 @@ body {
 }
 
 /* ============================================ */
-/* PRODUCTOS - TARJETAS (CARDS)                */
+/* PRODUCTOS - TARJETAS                         */
 /* ============================================ */
 
 .products-grid {
@@ -1244,4 +1244,66 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--gray-400);
+}
+
+/* ============================================ */
+/* BOTÓN EXPORTAR PDF                          */
+/* ============================================ */
+
+.btn-export-pdf {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-export-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.btn-export-pdf i {
+    font-size: 14px;
+}
+
+.btn-export-pdf:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================ */
+/* RESPONSIVE - BOTÓN PDF                      */
+/* ============================================ */
+
+@media (max-width: 768px) {
+    .btn-export-pdf {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+    
+    .btn-export-pdf span {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-export-pdf {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    
+    .btn-export-pdf i {
+        font-size: 12px;
+    }
 }
